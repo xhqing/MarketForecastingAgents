@@ -1,0 +1,98 @@
+{
+  "a_shares": {
+    "index_major": [
+      {"name": "", "code": ""}
+    ],
+    "index_sector": [
+      {"name": "", "code": ""}
+    ],
+    "sse_stocks": [
+      {"name": "", "code": ""}
+    ],
+    "sse_etf": [
+      {"name": "", "code": ""}
+    ],
+    "szse_stocks": [
+      {"name": "", "code": ""}
+    ],
+    "szse_etf": [
+      {"name": "", "code": ""}
+    ]
+  },
+  "hk_shares": {
+    "index_major": [
+      {"name": "恒生指数", "code": "HSI"},
+      {"name": "恒生科技指数", "code": "HSTECH"},
+      {"name": "国企指数", "code": "HSCEI"}
+    ],
+    "index_sector": [
+      {"name": "", "code": ""}
+    ],
+    "hkex_stocks": [
+      {"name": "腾讯控股", "code": "00700.HK"},
+      {"name": "阿里巴巴", "code": "09988.HK"},
+      {"name": "小米", "code": "01810.HK"},
+      {"name": "快手", "code": "01024.HK"},
+      {"name": "京东", "code": "09618.HK"},
+      {"name": "美团", "code": "03690.HK"},
+      {"name": "紫金矿业", "code": "02899.HK"},
+      {"name": "中芯国际", "code": "00981.HK"},
+      {"name": "华虹半导体", "code": "01347.HK"},
+      {"name": "泡泡玛特", "code": "09992.HK"},
+      {"name": "中国神华", "code": "01088.HK"},
+      {"name": "宁德时代", "code": "03750.HK"},
+      {"name": "赣锋锂业", "code": "01772.HK"},
+      {"name": "昆仑能源", "code": "00135.HK"},
+      {"name": "中国石油化工股份", "code": "00386.HK"},
+      {"name": "国泰君安国际", "code": "01788.HK"},
+      {"name": "中国宏桥", "code": "01378.HK"},
+      {"name": "招商银行", "code": "03968.HK"},
+      {"name": "建设银行", "code": "00939.HK"},
+      {"name": "中国银行", "code": "03988.HK"},
+      {"name": "汇丰控股", "code": "00005.HK"},
+      {"name": "信达生物", "code": "01801.HK"},
+      {"name": "药明生物", "code": "02269.HK"},
+      {"name": "中国海洋石油", "code": "00883.HK"},
+      {"name": "中国石油股份", "code": "00857.HK"},
+      {"name": "工商银行", "code": "01398.HK"},
+      {"name": "比亚迪股份", "code": "01211.HK"},
+      {"name": "香港交易所", "code": "00388.HK"},
+      {"name": "友邦保险", "code": "01299.HK"},
+      {"name": "中国人寿", "code": "02628.HK"},
+      {"name": "中国平安", "code": "02318.HK"},
+      {"name": "中国移动", "code": "00941.HK"},
+      {"name": "网易", "code": "09999.HK"},
+      {"name": "百度集团", "code": "09888.HK"},
+      {"name": "理想汽车", "code": "02015.HK"},
+      {"name": "小鹏汽车", "code": "09868.HK"},
+      {"name": "安踏体育", "code": "02020.HK"},
+      {"name": "地平线机器人", "code": "09660.HK"}
+    ],
+    "hkex_etf": [
+      {"name": "盈富基金", "code": "02800.HK"},
+      {"name": "南方恒生科技", "code": "03033.HK"},
+      {"name": "恒生中国企业", "code": "02828.HK"}
+    ]
+  },
+  "us_shares": {
+    "index_major": [
+      {"name": "标普500指数", "code": ".SPX"},
+      {"name": "纳斯达克100指数", "code": ".NDX"},
+      {"name": "道琼斯工业指数", "code": ".DJI"}
+    ],
+    "index_sector": [
+      {"name": "", "code": ""}
+    ],
+    "stocks": [
+      {"name": "", "code": ""}
+    ],
+    "adr": [
+      {"name": "", "code": ""}
+    ],
+    "etf": [
+      {"name": "纳斯达克100指数ETF", "code": "QQQ"},
+      {"name": "标普500指数ETF", "code": "SPY"},
+      {"name": "道琼斯工业指数ETF", "code": "DIA"}
+    ]
+  }
+}
