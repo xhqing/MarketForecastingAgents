@@ -136,6 +136,6 @@ MarketForecastingAgents
 
 本项目生成的研报仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。
 
-## 版权
+## 许可证
 
-© 2026 MarketForecastingAgents. All rights reserved.
+本项目采用 [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE) 开源许可证。

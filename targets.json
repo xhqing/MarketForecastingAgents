@@ -21,9 +21,9 @@
   },
   "hk_shares": {
     "index_major": [
-      {"name": "恒生指数", "code": "HSI"},
-      {"name": "恒生科技指数", "code": "HSTECH"},
-      {"name": "国企指数", "code": "HSCEI"}
+      {"name": "", "code": ""},
+      {"name": "", "code": ""},
+      {"name": "", "code": ""}
     ],
     "index_sector": [
       {"name": "", "code": ""}
@@ -42,7 +42,6 @@
       {"name": "中国神华", "code": "01088.HK"},
       {"name": "宁德时代", "code": "03750.HK"},
       {"name": "赣锋锂业", "code": "01772.HK"},
-      {"name": "昆仑能源", "code": "00135.HK"},
       {"name": "中国石油化工股份", "code": "00386.HK"},
       {"name": "国泰君安国际", "code": "01788.HK"},
       {"name": "中国宏桥", "code": "01378.HK"},
@@ -69,16 +68,16 @@
       {"name": "地平线机器人", "code": "09660.HK"}
     ],
     "hkex_etf": [
-      {"name": "盈富基金", "code": "02800.HK"},
-      {"name": "南方恒生科技", "code": "03033.HK"},
-      {"name": "恒生中国企业", "code": "02828.HK"}
+      {"name": "", "code": ""},
+      {"name": "", "code": ""},
+      {"name": "", "code": ""}
     ]
   },
   "us_shares": {
     "index_major": [
-      {"name": "标普500指数", "code": ".SPX"},
-      {"name": "纳斯达克100指数", "code": ".NDX"},
-      {"name": "道琼斯工业指数", "code": ".DJI"}
+      {"name": "", "code": ""},
+      {"name": "", "code": ""},
+      {"name": "", "code": ""}
     ],
     "index_sector": [
       {"name": "", "code": ""}
@@ -90,9 +89,9 @@
       {"name": "", "code": ""}
     ],
     "etf": [
-      {"name": "纳斯达克100指数ETF", "code": "QQQ"},
-      {"name": "标普500指数ETF", "code": "SPY"},
-      {"name": "道琼斯工业指数ETF", "code": "DIA"}
+      {"name": "", "code": ""},
+      {"name": "", "code": ""},
+      {"name": "", "code": ""}
     ]
   }
 }
