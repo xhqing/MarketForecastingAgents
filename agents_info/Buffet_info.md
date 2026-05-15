@@ -1,0 +1,1 @@
+我用 TRAE 做了一个有意思的Agent 「Buffett」。 点击 https://s.trae.com.cn/a/2407ec?region=cn 立即复刻，一起来玩吧！

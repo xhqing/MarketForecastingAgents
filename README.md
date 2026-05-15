@@ -1,141 +1,250 @@
 # MarketForecastingAgents
 
-基于多智能体协作的 AI 市场研究报告自动生成系统，覆盖 A 股、港股、美股三大市场。
+An AI-powered market research report auto-generation system based on multi-agent collaboration, covering A-shares, Hong Kong stocks, and US stocks.
 
-## 系统架构
+[中文文档](README_cn.md)
 
-本项目采用 **多智能体协作架构**，由一个总控 Agent（TRAE CN SOLO Agent）统一调度 7 个专项智能体，各司其职完成数据获取、市场分析和研报撰写。
+***
+
+## Features
+
+- **Multi-Agent Collaboration**: Leverages three specialized investment agents — Livermore (trend-following), Buffett (value investing), and Cathie Wood (disruptive innovation) — each with distinct analytical philosophies, providing multi-perspective market assessments.
+- **Full Market Coverage**: Supports A-shares (SSE/SZSE), Hong Kong stocks (HKEX), and US stocks (NYSE/NASDAQ), including indices, individual stocks, and ETFs.
+- **Real-Time Data Integration**: Connects to multiple MCP (Model Context Protocol) servers for real-time market data, financial statements, technical indicators, sector fund flows, and research reports.
+- **Automated Validation**: Built-in `targets_validator.py` ensures generated reports fully cover all configured targets with zero omissions.
+- **Flexible Target Configuration**: All analysis targets are managed through a single `targets.json` file — add, remove, or modify entries as needed.
+
+***
+
+## System Architecture
+
+### Agent Team
+
+| Agent           | Role                | Analytical Philosophy                                             | MCP / Capabilities                                          |
+| --------------- | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------- |
+| **@Livermore**  | Market Analyst      | Trend-following, key-point trading, volume-price confirmation     | Custom MCP servers + Web Search + Financial market analysis |
+| **@Buffett**    | Value Investor      | Fundamental analysis, margin of safety, long-term holding         | China Stock MCP + Market Data Fetcher + Research reports    |
+| **@CathieWood** | Innovation Investor | Disruptive technology, convergence across sectors, 5-year horizon | FinanceKit + Market Data Fetcher + Research reports         |
+| **@SOLO Agent** | Coordinator         | Merges outputs from all agents, saves reports, runs validation    | File system + Command execution                             |
+
+### MCP Servers
+
+| MCP Server              | Function                                                                                | Connected Agents               |
+| ----------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
+| **market-data-fetcher** | Fetches index, stock, and ETF data (Longport / AKShare / Yahoo Finance)                 | Livermore, Buffett, CathieWood |
+| **financekit**          | Stock quotes, company info, technical analysis, risk metrics, options chain             | CathieWood                     |
+| **china-stock-mcp**     | A-share financial data, balance sheets, income statements, cash flows, shareholder info | Buffett                        |
+| **mcp-aktools**         | AKShare-based tools: stock indicators, sector fund flows, trading suggestions           | Livermore                      |
+| **financemcp-dcths**    | Tonghuashun (THS) and Dongfang Caifu (DC) sector indices, members, and daily data       | Livermore                      |
+| **akshare-one-mcp**     | Historical data, real-time data, financial metrics (HTTP-based)                         | Livermore, Buffett             |
+| **Time**                | Current time and timezone conversion                                                    | All agents                     |
+| **FaXianBaoGao (发现报告)** | Research report search and content retrieval                                            | All agents                     |
+| **tushareMcp**          | TuShare financial data API (HTTP-based)                                                 | Buffett                        |
+
+### Workflow
 
 ```
-                        ┌───────────────────────────────┐
-                        │     TRAE CN SOLO Coder        │
-                        │         （总控 Agent）           │
-                        └───────┬───────────┬───────────┘
-                                │           │
-        ┌───────────────────────┤           ├───────────────────────┐
-        │                       │           │                       │
-        ▼                       ▼           ▼                       ▼
-┌───────────────┐   ┌───────────────┐   ┌───────────┐   ┌─────────────────┐
-│ 数据获取智能体  │   │  市场分析智能体  │   │ 研报撰写智能体│   │   浏览器预览      │
-│  (×5 个)      │   │  (Livermore)  │   │   (Report  │   │                 │
-│               │   │               │   │  Generator)│   │                 │
-└───────────────┘   └───────────────┘   └───────────┘   └─────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                        User Instruction                          │
+│  (Sent to SOLO Agent in TRAE CN SOLO mode)                       │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Step 1: Learn from Chat History                                 │
+│  All agents study past analysis patterns in chatHistory/          │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Step 2: Gather Real-Time Data                                   │
+│  Each agent uses MCP tools and WebSearch to collect latest data   │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Step 3: Multi-Agent Deliberation                                │
+│  All 4 agents discuss and produce a consolidated market forecast  │
+│  with probability-weighted scenarios for each target              │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Step 4: Merge & Save Report                                     │
+│  SOLO Agent merges all outputs into a Markdown report             │
+│  saved to chatHistory/                                           │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Step 5: Validate Coverage                                       │
+│  SOLO Agent runs targets_validator.py                            │
+│  If exit code = 1 → loop back to Step 1                         │
+│  If exit code = 0 → done ✓                                       │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-### 智能体团队
+***
 
-| 智能体 | 角色 | 使用的 MCP / 能力 |
-|--------|------|-------------------|
-| **@MarketDataFetcher001** | 主数据获取 | `market-data-fetcher` MCP 服务器（优先使用） |
-| **@MarketDataFetcher002** | 辅助数据获取 | 自有的独立 MCP 服务器 |
-| **@MarketDataFetcher003** | 辅助数据获取 | 自有的独立 MCP 服务器 |
-| **@MarketDataFetcher004** | 辅助数据获取 | 自有的独立 MCP 服务器 |
-| **@MarketDataFetcher005** | 辅助数据获取 | 自有的独立 MCP 服务器 |
-| **@Livermore** | 市场分析 | 自有 MCP 服务器 + 网络搜索 + 金融市场分析能力 |
-| **@Report Generator** | 研报撰写 | `report-generator` MCP 服务器 |
-
-### MCP 服务器
-
-| MCP 服务器 | 功能 | 关联智能体 |
-|------------|------|-----------|
-| `market-data-fetcher` | 主要数据获取（指数、股票、ETF 实时/历史行情） | MarketDataFetcher001（优先） |
-| `report-generator` | 生成空研报模板 + 写入最终完整研报 | Report Generator |
-| 各智能体自有 MCP | 辅助补充数据获取、多源交叉验证 | MarketDataFetcher002 ~ 005 |
-
-### 工作流程
-
-```
-Step 1: 生成模板
-  Report Generator ──report-generator MCP──▶ 空研报模板 ──▶ 所有智能体
-
-Step 2: 数据获取
-  MarketDataFetcher001 ──market-data-fetcher MCP──▶ 主要数据 ──┐
-  MarketDataFetcher002~005 ──各自 MCP──▶ 补充数据 ────────────┤
-                                                                ▼
-                                                       整理后的最新数据
-
-Step 3: 市场分析
-  Livermore ◀── 研报模板 + 最新数据
-  Livermore ──MCP + WebSearch + 金融分析──▶ 分析结果 ──▶ Report Generator
-
-Step 4: 生成研报
-  Report Generator ──report-generator MCP──▶ 最终完整研报 (.html)
-
-Step 5: 浏览器预览
-  自动打开生成的研报
-```
-
-## 项目结构
+## Project Structure
 
 ```
 MarketForecastingAgents
-├── README.md                 # 项目说明
-├── targets.json              # 标的配置文件（用户维护）
-└── .trae/                    # TRAE CN 配置目录
-    ├── mcp.json              # MCP 服务器配置
-    └── agents/               # 自定义智能体配置
-        ├── MarketDataFetcher001.md
-        ├── MarketDataFetcher002.md
-        ├── MarketDataFetcher003.md
-        ├── MarketDataFetcher004.md
-        ├── MarketDataFetcher005.md
-        ├── Livermore.md
-        └── Report Generator.md
+├── .trae/
+│   ├── mcp.json.example       # MCP server configuration template
+│   └── rules/
+│       ├── toolcallingrules.md # Tool calling rules (English)
+│       └── 工具调用规则.md      # Tool calling rules (Chinese)
+├── agents_info/
+│   ├── Livermore_info.md      # Livermore agent prompt & instructions
+│   ├── Buffet_info.md         # Buffett agent prompt & instructions
+│   └── CathieWood_info.md     # Cathie Wood agent prompt & instructions
+├── chatHistory/               # Generated research reports & chat logs
+│   ├── 全市场走势预判_20260513.md  # Full market forecast report
+│   ├── 港股走势预判_20260513.md    # HK market forecast report
+│   └── ...
+├── targets.json               # Target configuration (indices, stocks, ETFs)
+├── targets_validator.py       # Report coverage validation script
+├── .gitignore
+├── LICENSE                    # AGPL-3.0
+├── README.md                  # This file (English)
+└── README_cn.md               # Chinese documentation
 ```
 
-## 标的配置（targets.json）
+***
 
-所有分析标的通过项目根目录下的 `targets.json` 统一管理，覆盖 A 股、港股、美股三大市场，支持指数、个股和 ETF 的灵活配置。用户可直接编辑该文件增删标的。
+## Target Configuration (targets.json)
 
-当前预设标的包括：
+All analysis targets are managed through `targets.json` in the project root directory, covering A-shares, Hong Kong stocks, and US stocks. The file supports flexible configuration of indices, individual stocks, and ETFs. Users can directly edit this file to add or remove targets.
 
-- **港股指数**：恒生指数 (HSI)、恒生科技指数 (HSTECH)、国企指数 (HSCEI)
-- **美股指数**：标普 500 (.SPX)、纳斯达克 100 (.NDX)、道琼斯工业 (.DJI)
-- **港股个股**：腾讯控股、阿里巴巴、小米、快手、京东、美团、紫金矿业、中芯国际、华虹半导体、泡泡玛特、中国神华、宁德时代、赣锋锂业、昆仑能源、中国石油化工股份、国泰君安国际、中国宏桥、招商银行、建设银行、中国银行、汇丰控股、信达生物、药明生物、中国海洋石油、中国石油股份、工商银行、比亚迪股份、香港交易所、友邦保险、中国人寿、中国平安、中国移动、网易、百度集团、理想汽车、小鹏汽车、安踏体育、地平线机器人等
-- **港股 ETF**：盈富基金、南方恒生科技、恒生中国企业
-- **美股 ETF**：QQQ、SPY、DIA
-- **A 股**：预留配置结构，可按需填入
+### Structure
 
-## 数据获取策略
-
-数据获取采用**优先级 + 多源交叉验证**策略：
-
-1. **优先**由 `MarketDataFetcher001` 通过 `market-data-fetcher` MCP 服务器获取指数、股票、ETF 的实时行情和历史数据
-2. **其次**由 `MarketDataFetcher002 ~ 005` 利用各自独立的 MCP 服务器进行补充数据获取和交叉验证，确保数据完整性和准确性
-3. 所有数据按 `targets.json` 中配置的标的逐一获取，整理后统一交付给 `Livermore` 进行分析
-
-## 使用方式
-
-### 前置准备
-
-1. **配置 MCP 服务器**：在 `.trae/mcp.json` 中配置 `market-data-fetcher` 和 `report-generator` 两个 MCP 服务器，以及各数据智能体自有的 MCP 连接信息。
-
-2. **配置自定义智能体**：在 `.trae/agents/` 目录下完成 7 个智能体的自定义配置（`MarketDataFetcher001 ~ 005`、`Livermore`、`Report Generator`）。
-
-3. **配置标的**：根据需要编辑 `targets.json`，增删需要分析的指数、股票和 ETF。
-
-### 生成研报
-
-配置完成后，在 TRAE CN 中切换到 **SOLO 模式**，向 SOLO Coder 发送以下指令：
-
-```markdown
-与你的下级智能体(@MarketDataFetcher001 @MarketDataFetcher002 @MarketDataFetcher003 @MarketDataFetcher004 @MarketDataFetcher005 @Livermore @Report Generator)通力合作，生成一份最新的市场研究报告。 
-
- 具体步骤： 
-     1、首先让@Report Generator利用report-generator MCP服务器生成空的研报模板并把这个空的研报模板给到所有其他智能体(@MarketDataFetcher001 @MarketDataFetcher002 @MarketDataFetcher003 @MarketDataFetcher004 @MarketDataFetcher005 @Livermore)。 
-     2、(@MarketDataFetcher001 @MarketDataFetcher002 @MarketDataFetcher003 @MarketDataFetcher004 @MarketDataFetcher005)根据研报模板和当前项目根目录下的targets.json文件得知需要哪些最新数据后开始利用各自的MCP服务器去获取数据，优先让@MarketDataFetcher001利用market-data-fetcher MCP服务器获取数据，其次再考虑另外4个数据获取智能体(@MarketDataFetcher002 @MarketDataFetcher003 @MarketDataFetcher004 @MarketDataFetcher005)协助获取最新数据，最后把这些最新数据整理后给到@Livermore。 
-     3、Livemore根据研报模板、最新市场数据、自己的MCP服务器、网络搜索技能和金融市场分析能力对targets.json里配置的所有标的进行深入分析，分析后把需要在研报里面展示的所有数据和信息给到@Report Generator。 
-     4、@Report Generator根据这些数据和信息再次利用report-generator MCP服务器生成最终的完整研报。 
-
- 报告生成后，直接在浏览器中打开它。
+```json
+{
+  "a_shares": {
+    "index_major": [{"name": "...", "code": "000001.SH"}],
+    "sse_stocks":   [{"name": "...", "code": "688981.SH"}],
+    "sse_etf":      [{"name": "...", "code": "513310.SH"}],
+    "szse_stocks":  [{"name": "...", "code": "000063.SZ"}],
+    "szse_etf":     [{"name": "...", "code": ""}]
+  },
+  "hk_shares": {
+    "index_major":  [{"name": "...", "code": "800000.HK"}],
+    "hkex_stocks":  [{"name": "...", "code": "00700.HK"}],
+    "hkex_etf":     [{"name": "...", "code": "02800.HK"}]
+  },
+  "us_shares": {
+    "index_major":  [{"name": "...", "code": ".NDX"}],
+    "stocks":       [{"name": "...", "code": "NVDA"}],
+    "adr":          [{"name": "...", "code": "BABA"}],
+    "etf":          [{"name": "...", "code": "QQQ"}]
+  }
+}
 ```
 
-智能体团队将自动按流程协作：**生成模板 → 获取数据 → 市场分析 → 撰写研报**，完成后自动在浏览器中打开生成的研报。
+### Current Preset Targets
 
-## 免责声明
+- **A-Share Indices**: SSE Composite (000001.SH), SZSE Component (399001.SZ)
+- **A-Share Stocks**: SMIC (688981.SH), ZTE (000063.SZ)
+- **A-Share ETFs**: China-Korea Semiconductor ETF (513310.SH)
+- **HK Indices**: Hang Seng Index (800000.HK), Hang Seng Tech Index (800700.HK)
+- **HK Stocks**: Tencent, Alibaba, Xiaomi, Kuaishou, JD.com, Meituan, SMIC, Pop Mart, CATL, BYD, HKEX, AIA, China Mobile, NetEase, Baidu, Li Auto, XPeng, Anta, Horizon Robotics, and 20+ more
+- **HK ETFs**: Tracker Fund (02800.HK), CSOP Hang Seng Tech (03033.HK)
+- **US Indices**: NASDAQ 100 (.NDX), S\&P 500 (.SPX)
+- **US Stocks**: NVIDIA (NVDA)
+- **US ADRs**: Alibaba (BABA)
+- **US ETFs**: QQQ, SPY
 
-本项目生成的研报仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。
+> **Note**: Entries with empty `name` and `code` fields are placeholders — fill them in or remove them as needed.
 
-## 许可证
+***
 
-本项目采用 [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE) 开源许可证。
+## Report Validation (targets\_validator.py)
+
+The `targets_validator.py` script verifies that a generated research report fully covers all targets defined in `targets.json`.
+
+### Usage
+
+```bash
+python targets_validator.py <report.md> [--targets <targets.json>]
+```
+
+### What It Does
+
+1. Extracts all valid targets from `targets.json` (entries where both `name` and `code` are non-empty)
+2. Searches the report markdown for each target's name or code
+3. Outputs: missing targets list, coverage statistics
+
+### Exit Codes
+
+| Code | Meaning                           |
+| ---- | --------------------------------- |
+| `0`  | All targets covered, no omissions |
+| `1`  | Missing or extra targets detected |
+
+***
+
+## Getting Started
+
+### Prerequisites
+
+- [TRAE CN](https://www.trae.com.cn/) IDE with SOLO mode support
+- Python 3.10+ (for running `targets_validator.py`)
+- [uv](https://github.com/astral-sh/uv) (for MCP server installation via `uvx`)
+- [Node.js](https://nodejs.org/) (for MCP server installation via `npx`)
+- Optional: [Longport](https://longportapp.com/) account for real-time HK/US market data
+
+### Setup
+
+1. **Configure MCP Servers**: Copy the example configuration and fill in your credentials:
+   ```bash
+   cp .trae/mcp.json.example .trae/mcp.json
+   ```
+   Edit `.trae/mcp.json` and replace placeholder values:
+   - `LONGPORT_APP_KEY`, `LONGPORT_APP_SECRET`, `LONGPORT_ACCESS_TOKEN` — your Longport API credentials
+   - `TARGETS_JSON_PATH` — absolute path to your `targets.json`
+   - `tushareMcp` URL — replace `your_tushare_token_here` with your TuShare token
+2. **Configure Targets**: Edit `targets.json` to add, remove, or modify the indices, stocks, and ETFs you want to analyze.
+3. **Set Up Agents**: Import the three agents into TRAE CN using the links in `agents_info/`:
+   - Livermore: See `agents_info/Livermore_info.md` for the prompt
+   - Buffett: See `agents_info/Buffet_info.md` for the prompt
+   - Cathie Wood: See `agents_info/CathieWood_info.md` for the prompt
+
+### Generating a Research Report
+
+After configuration, switch to **SOLO mode** in TRAE CN and send the following instruction to the SOLO Agent:
+
+```PlainText
+1. Learn the financial market analysis logic and response framework from the files in /path/to/MarketForecastingAgents/chatHistory/ together with @Livermore @Buffett @CathieWood;
+2. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) use MCP tools or WebSearch to gather as much latest data and information as possible;
+3. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) discuss and produce a forecast for the next 6 months for all targets in /path/to/MarketForecastingAgents/targets.json, assigning probability values and price ranges for each of the following scenarios with reasoning: 1. Range-bound with bullish bias; 2. Range-bound with bearish bias; 3. Volatile uptrend; 4. Volatile downtrend; 5. Direct uptrend; 6. Direct downtrend.
+4. @SOLO Agent merges the outputs from @Livermore @Buffett @CathieWood and @SOLO Agent, saves the merged content as a Markdown document in /path/to/MarketForecastingAgents/chatHistory/;
+5. @SOLO Agent runs /path/to/MarketForecastingAgents/targets_validator.py — if the exit code is 1, repeat steps 1-4 until the exit code is 0.
+```
+
+> **Important**: Replace `/path/to/MarketForecastingAgents/` with the actual absolute path on your system.
+
+***
+
+## Forecast Scenarios
+
+Each target in the generated report is evaluated against six probability-weighted scenarios:
+
+| # | Scenario                      | Description                                                |
+| - | ----------------------------- | ---------------------------------------------------------- |
+| 1 | Range-bound with bullish bias | Price oscillates within a range but leans upward           |
+| 2 | Range-bound with bearish bias | Price oscillates within a range but leans downward         |
+| 3 | Volatile uptrend              | Price trends upward with significant oscillations          |
+| 4 | Volatile downtrend            | Price trends downward with significant oscillations        |
+| 5 | Direct uptrend                | Price moves steadily upward without significant pullbacks  |
+| 6 | Direct downtrend              | Price moves steadily downward without significant rebounds |
+
+***
+
+## Disclaimer
+
+The research reports generated by this project are for reference only and do not constitute any investment advice. Financial markets carry inherent risks — invest with caution and always conduct your own due diligence.
+
+## License
+
+This project is licensed under the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
