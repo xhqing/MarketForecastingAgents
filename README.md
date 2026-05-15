@@ -215,11 +215,11 @@ python targets_validator.py <report.md> [--targets <targets.json>]
 After configuration, switch to **SOLO mode** in TRAE CN and send the following instruction to the SOLO Agent:
 
 ```PlainText
-1. Learn the financial market analysis logic and response framework from the files in /path/to/MarketForecastingAgents/chatHistory/ together with @Livermore @Buffett @CathieWood;
-2. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) use MCP tools or WebSearch to gather as much latest data and information as possible;
-3. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) discuss and produce a forecast for the next 6 months for all targets in /path/to/MarketForecastingAgents/targets.json, assigning probability values and price ranges for each of the following scenarios with reasoning: 1. Range-bound with bullish bias; 2. Range-bound with bearish bias; 3. Volatile uptrend; 4. Volatile downtrend; 5. Direct uptrend; 6. Direct downtrend.
-4. @SOLO Agent merges the outputs from @Livermore @Buffett @CathieWood and @SOLO Agent, saves the merged content as a Markdown document in /path/to/MarketForecastingAgents/chatHistory/;
-5. @SOLO Agent runs /path/to/MarketForecastingAgents/targets_validator.py — if the exit code is 1, repeat steps 1-4 until the exit code is 0.
+1. You and @Livermore @Buffett @CathieWood study the financial market analysis logic and response framework in this directory (/path/to/MarketForecastingAgents/chatHistory/).
+2. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) use MCP tools or WebSearch to gather as much latest data and information as possible.
+3. All 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent) discuss and produce a forecast for the next 6 months for all targets in this file (/path/to/MarketForecastingAgents/targets.json), assigning probability values and price ranges for each of the following scenarios with reasoning: 1. Range-bound with bullish bias; 2. Range-bound with bearish bias; 3. Volatile uptrend; 4. Volatile downtrend; 5. Direct uptrend; 6. Direct downtrend.
+4. You comprehensively analyze the outputs from all 4 agents (@Livermore @Buffett @CathieWood @SOLO Agent), and save the comprehensive analysis results as a Markdown document in this directory (/path/to/MarketForecastingAgents/chatHistory/).
+5. Finally, you perform target count validation: run this Python file (/path/to/MarketForecastingAgents/targets_validator.py); if the exit code is 1, repeat steps 1-5 until the exit code is 0.
 ```
 
 > **Important**: Replace `/path/to/MarketForecastingAgents/` with the actual absolute path on your system.
