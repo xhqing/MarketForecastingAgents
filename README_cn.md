@@ -219,11 +219,11 @@ python targets_validator.py <report.md> [--targets <targets.json>]
 配置完成后，在 TRAE CN 中切换到 **SOLO 模式**，向 SOLO Agent 发送以下指令：
 
 ```PlainText
-1、/path/to/MarketForecastingAgents/chatHistory/ 和 @Livermore @Buffett @CathieWood 一起学习这个目录中的金融市场分析逻辑和回答框架；
-2、你们4个智能体（@Livermore @Buffett @CathieWood @SOLO Agent）一起利用 MCP 工具或 WebSearch 技能搜索尽可能多的最新数据和信息；
-3、你们4个智能体（@Livermore @Buffett @CathieWood @SOLO Agent）商量探讨后给出一份截止今天当前时刻的接下来半年 /path/to/MarketForecastingAgents/targets.json 这个文件中提到的所有标的的走势预判，分别给出以下每个选项的概率值和每个选项的价格运行区间并说明理由，选项：1、震荡偏强；2、震荡偏弱；3、震荡上行；4、震荡下行；5、直接上行；6、直接下行。
-4、@SOLO Agent 把 @Livermore @Buffett @CathieWood @SOLO Agent 这4个智能体的输出内容合并起来，把输出内容保存在 Markdown 文档中并把这个文档存放在 /path/to/MarketForecastingAgents/chatHistory/
-5、@SOLO Agent 执行 /path/to/MarketForecastingAgents/targets_validator.py，执行后若退出码为1则重新执行步骤1-4直到退出码为0为止。
+1、你和 @Livermore @Buffett @CathieWood 一起学习这个目录(/path/to/MarketForecastingAgents/chatHistory/)中的金融市场分析逻辑和回答框架。
+2、你们4个智能体(@Livermore @Buffett @CathieWood @SOLO Agent)一起利用 MCP 工具或 WebSearch 技能搜索尽可能多的最新数据和信息。
+3、你们4个智能体(@Livermore @Buffett @CathieWood @SOLO Agent)商量探讨后给出一份截止今天当前时刻的接下来半年这个文件(/path/to/MarketForecastingAgents/targets.json)中提到的所有标的的走势预判，分别给出以下每个选项的概率值和每个选项的价格运行区间并说明理由，选项：1、震荡偏强；2、震荡偏弱；3、震荡上行；4、震荡下行；5、直接上行；6、直接下行。
+4、你把你们4个智能体((@Livermore @Buffett @CathieWood @SOLO Agent)的输出内容进行综合分析，把综合分析的结果保存在 Markdown 文档中并把这个文档存放在这个目录(/path/to/MarketForecastingAgents/chatHistory/)中。 
+5、最后由你来进行目标数校验：运行这个Py文件(/path/to/MarketForecastingAgents/targets_validator.py)，运行后若退出码为1则重新执行步骤1-5直到退出码为0为止。
 ```
 
 > **重要提示**：请将 `/path/to/MarketForecastingAgents/` 替换为你系统上的实际绝对路径。
