@@ -4,7 +4,7 @@
 
 [English Documentation](README.md)
 
----
+***
 
 ## 功能特性
 
@@ -14,32 +14,32 @@
 - **自动化校验**：内置 `targets_validator.py` 确保生成的研报完整覆盖所有配置标的，零遗漏。
 - **灵活的标的配置**：所有分析标的通过 `targets.json` 统一管理，可随时增删改。
 
----
+***
 
 ## 系统架构
 
 ### 智能体团队
 
-| 智能体 | 角色 | 分析哲学 | MCP / 能力 |
-|--------|------|----------|-----------|
-| **@Livermore** | 市场分析师 | 趋势跟踪、关键点交易、量价验证 | 自有 MCP 服务器 + 网络搜索 + 金融市场分析能力 |
-| **@Buffett** | 价值投资者 | 基本面分析、安全边际、长期持有 | China Stock MCP + Market Data Fetcher + 研报 |
-| **@CathieWood** | 创新投资者 | 颠覆式技术、跨行业融合、5年视野 | FinanceKit + Market Data Fetcher + 研报 |
-| **@SOLO Agent** | 协调者 | 合并所有智能体输出、保存报告、运行校验 | 文件系统 + 命令执行 |
+| 智能体             | 角色    | 分析哲学                | MCP / 能力                                   |
+| --------------- | ----- | ------------------- | ------------------------------------------ |
+| **@Livermore**  | 市场分析师 | 趋势跟踪、关键点交易、量价验证     | 自有 MCP 服务器 + 网络搜索 + 金融市场分析能力               |
+| **@Buffett**    | 价值投资者 | 基本面分析、安全边际、长期持有     | China Stock MCP + Market Data Fetcher + 研报 |
+| **@CathieWood** | 创新投资者 | 颠覆式技术、跨行业融合、5年视野    | FinanceKit + Market Data Fetcher + 研报      |
+| **@SOLO Agent** | 协调者   | 合并所有智能体输出、保存报告、运行校验 | 文件系统 + 命令执行                                |
 
 ### MCP 服务器
 
-| MCP 服务器 | 功能 | 关联智能体 |
-|------------|------|-----------|
+| MCP 服务器                 | 功能                                                  | 关联智能体                          |
+| ----------------------- | --------------------------------------------------- | ------------------------------ |
 | **market-data-fetcher** | 获取指数、股票和 ETF 数据（Longport / AKShare / Yahoo Finance） | Livermore, Buffett, CathieWood |
-| **financekit** | 股票报价、公司信息、技术分析、风险指标、期权链 | CathieWood |
-| **china-stock-mcp** | A 股财务数据、资产负债表、利润表、现金流量表、股东信息 | Buffett |
-| **mcp-aktools** | 基于 AKShare 的工具：股票指标、板块资金流向、交易建议 | Livermore |
-| **financemcp-dcths** | 同花顺和东方财富板块指数、成分股和日行情数据 | Livermore |
-| **akshare-one-mcp** | 历史数据、实时数据、财务指标（基于 HTTP） | Livermore, Buffett |
-| **Time** | 当前时间和时区转换 | 所有智能体 |
-| **FaXianBaoGao（发现报告）** | 研报搜索和内容获取 | 所有智能体 |
-| **tushareMcp** | TuShare 金融数据 API（基于 HTTP） | Buffett |
+| **financekit**          | 股票报价、公司信息、技术分析、风险指标、期权链                             | CathieWood                     |
+| **china-stock-mcp**     | A 股财务数据、资产负债表、利润表、现金流量表、股东信息                        | Buffett                        |
+| **mcp-aktools**         | 基于 AKShare 的工具：股票指标、板块资金流向、交易建议                     | Livermore                      |
+| **financemcp-dcths**    | 同花顺和东方财富板块指数、成分股和日行情数据                              | Livermore                      |
+| **akshare-one-mcp**     | 历史数据、实时数据、财务指标（基于 HTTP）                             | Livermore, Buffett             |
+| **Time**                | 当前时间和时区转换                                           | 所有智能体                          |
+| **FaXianBaoGao（发现报告）**  | 研报搜索和内容获取                                           | 所有智能体                          |
+| **tushareMcp**          | TuShare 金融数据 API（基于 HTTP）                           | Buffett                        |
 
 ### 工作流程
 
@@ -84,7 +84,7 @@
 └──────────────────────────────────────────────────────────────────┘
 ```
 
----
+***
 
 ## 项目结构
 
@@ -111,7 +111,7 @@ MarketForecastingAgents
 └── README_cn.md               # 本文件（中文文档）
 ```
 
----
+***
 
 ## 标的配置（targets.json）
 
@@ -157,9 +157,9 @@ MarketForecastingAgents
 
 > **注意**：`name` 和 `code` 为空的条目为占位符，请根据需要填写或删除。
 
----
+***
 
-## 研报校验（targets_validator.py）
+## 研报校验（targets\_validator.py）
 
 `targets_validator.py` 脚本用于校验生成的研报是否完整覆盖 `targets.json` 中定义的所有标的。
 
@@ -177,12 +177,12 @@ python targets_validator.py <report.md> [--targets <targets.json>]
 
 ### 退出码
 
-| 退出码 | 含义 |
-|--------|------|
-| `0` | 全部覆盖，无遗漏 |
+| 退出码 | 含义        |
+| --- | --------- |
+| `0` | 全部覆盖，无遗漏  |
 | `1` | 存在遗漏或多余标的 |
 
----
+***
 
 ## 快速开始
 
@@ -197,18 +197,14 @@ python targets_validator.py <report.md> [--targets <targets.json>]
 ### 配置步骤
 
 1. **配置 MCP 服务器**：复制示例配置并填入凭证：
-
    ```bash
    cp .trae/mcp.json.example .trae/mcp.json
    ```
-
    编辑 `.trae/mcp.json`，替换以下占位符：
    - `LONGPORT_APP_KEY`、`LONGPORT_APP_SECRET`、`LONGPORT_ACCESS_TOKEN` — 你的 Longport API 凭证
    - `TARGETS_JSON_PATH` — `targets.json` 的绝对路径
    - `tushareMcp` URL — 将 `your_tushare_token_here` 替换为你的 TuShare token
-
 2. **配置标的**：根据需要编辑 `targets.json`，增删需要分析的指数、股票和 ETF。
-
 3. **设置智能体**：使用 `agents_info/` 中的信息将三个智能体导入 TRAE CN：
    - Livermore：参见 `agents_info/Livermore_info.md` 获取提示词
    - Buffett：参见 `agents_info/Buffet_info.md` 获取提示词
@@ -222,28 +218,28 @@ python targets_validator.py <report.md> [--targets <targets.json>]
 1、你和 @Livermore @Buffett @CathieWood 一起学习这个目录(/path/to/MarketForecastingAgents/chatHistory/)中的金融市场分析逻辑和回答框架。
 2、你们4个智能体(@Livermore @Buffett @CathieWood @SOLO Agent)一起利用 MCP 工具或 WebSearch 技能搜索尽可能多的最新数据和信息。
 3、你们4个智能体(@Livermore @Buffett @CathieWood @SOLO Agent)商量探讨后给出一份截止今天当前时刻的接下来半年这个文件(/path/to/MarketForecastingAgents/targets.json)中提到的所有标的的走势预判，分别给出以下每个选项的概率值和每个选项的价格运行区间并说明理由，选项：1、震荡偏强；2、震荡偏弱；3、震荡上行；4、震荡下行；5、直接上行；6、直接下行。
-4、你把你们4个智能体((@Livermore @Buffett @CathieWood @SOLO Agent)的输出内容进行综合分析，把综合分析的结果保存在 Markdown 文档中并把这个文档存放在这个目录(/path/to/MarketForecastingAgents/chatHistory/)中。 
+4、你把你们4个智能体(@Livermore @Buffett @CathieWood @SOLO Agent)的输出内容进行综合分析，把综合分析的结果保存在 Markdown 文档中并把这个文档存放在这个目录(/path/to/MarketForecastingAgents/chatHistory/)中。 
 5、最后由你来进行目标数校验：运行这个Py文件(/path/to/MarketForecastingAgents/targets_validator.py)，运行后若退出码为1则重新执行步骤1-5直到退出码为0为止。
 ```
 
 > **重要提示**：请将 `/path/to/MarketForecastingAgents/` 替换为你系统上的实际绝对路径。
 
----
+***
 
 ## 走势预判情景
 
 研报中对每个标的的走势预判涵盖以下六种概率加权情景：
 
-| 编号 | 情景 | 描述 |
-|------|------|------|
-| 1 | 震荡偏强 | 价格在区间内震荡但偏向上行 |
-| 2 | 震荡偏弱 | 价格在区间内震荡但偏向下行 |
-| 3 | 震荡上行 | 价格总体上行但伴随显著震荡 |
-| 4 | 震荡下行 | 价格总体下行但伴随显著震荡 |
-| 5 | 直接上行 | 价格稳步上行，无明显回调 |
-| 6 | 直接下行 | 价格稳步下行，无明显反弹 |
+| 编号 | 情景   | 描述            |
+| -- | ---- | ------------- |
+| 1  | 震荡偏强 | 价格在区间内震荡但偏向上行 |
+| 2  | 震荡偏弱 | 价格在区间内震荡但偏向下行 |
+| 3  | 震荡上行 | 价格总体上行但伴随显著震荡 |
+| 4  | 震荡下行 | 价格总体下行但伴随显著震荡 |
+| 5  | 直接上行 | 价格稳步上行，无明显回调  |
+| 6  | 直接下行 | 价格稳步下行，无明显反弹  |
 
----
+***
 
 ## 免责声明
 
