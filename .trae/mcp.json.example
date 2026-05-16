@@ -41,10 +41,6 @@
     "发现报告": {
       "type": "http",
       "url": "http://mcp.fxbaogao.com/sse"
-    },
-    "tushareMcp": {
-      "type": "http",
-      "url": "https://api.tushare.pro/mcp/?token=your_tushare_token_here"
     }
   }
 }
